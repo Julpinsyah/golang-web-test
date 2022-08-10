@@ -8,13 +8,14 @@ import (
 
 func main() {
 
-	// menambahkan handler ke server
+	//inisialisasi mux server
 	mux := http.NewServeMux()
 
-	// static file server
+	//menambahkan static file ke server
 	fileServer := http.FileServer(http.Dir("assets"))
 	mux.Handle("/static/", http.StripPrefix("/static/", fileServer))
 
+	// menambahkan handler ke server
 	mux.HandleFunc("/", handler.HomeHandler)
 	mux.HandleFunc("/home", handler.HomeHandler)
 	mux.HandleFunc("/ubah", handler.UpdateHandler)
