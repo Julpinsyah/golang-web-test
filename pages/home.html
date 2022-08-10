@@ -1,0 +1,175 @@
+{{ template "mainlayout" . }} {{ define "content" }}
+<div class="container">
+  <div class="row">
+    <header class="my-3">
+      <h3>Tugas Golang Web Julpinsyah</h3>
+    </header>
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <form id="formInput" action="" method="POST">
+            <div class="mb-3">
+              <label for="task" class="form-label">Tugas</label>
+              <input
+                type="text"
+                class="form-control"
+                id="task"
+                name="task"
+                autofocus
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="description" class="form-label"
+                >Deskripsi Tugas</label
+              >
+              <textarea
+                name="description"
+                id="description"
+                class="form-control"
+                rows="3"
+              ></textarea>
+            </div>
+
+            <div class="mb-3">
+              <label for="pic" class="form-label">PIC</label>
+              <input
+                type="text"
+                class="form-control"
+                id="pic"
+                name="pic"
+                placeholder="Person In Charge"
+              />
+            </div>
+
+            <div class="mb-3 col-md-4">
+              <label for="deadline" class="form-label">Deadline</label>
+              <input
+                type="date"
+                class="form-control"
+                id="deadline"
+                name="deadline"
+              />
+            </div>
+
+            <div class="mb-3 col-md-4">
+              <input type="checkbox" name="isDone" id="isDone" />
+              <label for="isDone" class="form-label">Selesai / Belum</label>
+            </div>
+            <div class="d-flex justify-content-end">
+              <button class="btn btn-secondary me-2" onclick="batal(event)">
+                Batal
+              </button>
+              <button id="btnSubmit" class="btn btn-primary" type="submit">
+                Tambah Tugas
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr class="devider my-3" />
+  <div class="row">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Tugas</th>
+              <th scope="col">Deskripsi Tugas</th>
+              <th scope="col">PIC</th>
+              <th scope="col">Deadline</th>
+              <th scope="col">Selesai / Belum</th>
+              <th scope="col">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{ range $index, $elem := . }}
+            <tr>
+              <th class="indek" scope="row" data-id="{{ $index }}">1</th>
+              <td>{{ .Task }}</td>
+              <td>{{ .Description }}</td>
+              <td>{{ .PIC }}</td>
+              <td>{{ .Deadline }}</td>
+              <td>
+                {{ if .IsDone }}
+                <span class="badge bg-primary">Selesai</span>
+                {{ else }}
+                <span class="badge bg-danger">Belum</span>
+                {{ end }}
+              </td>
+              <td>
+                <button
+                  id="btnUbah"
+                  class="btn btn-outline-primary btn-sm"
+                  onclick="ubahData(this)"
+                >
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+                <a
+                  href="/del?id={{ $index }}"
+                  class="btn btn-outline-danger btn-sm"
+                >
+                  <i class="bi bi-trash"></i>
+                </a>
+              </td>
+            </tr>
+            {{ end }}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{{ end }}
+<div></div>
+{{ define "script" }}
+<script>
+  const indek = document.querySelectorAll(".indek");
+  const formInput = document.querySelector("#formInput");
+  const btnSubmit = document.querySelector("#btnSubmit");
+  const task = document.querySelector("#task");
+  const description = document.querySelector("#description");
+  const pic = document.querySelector("#pic");
+  const deadline = document.querySelector("#deadline");
+  const isDone = document.querySelector("#isDone");
+  const btnUbah = document.querySelector("#btnUbah");
+
+  document.addEventListener("DOMContentLoaded", function () {
+    let i = 1;
+    indek.forEach((el) => {
+      el.textContent = i++;
+    });
+  });
+
+  function ubahData(e) {
+    let data = e.parentNode.parentNode;
+    formInput.action = "/ubah?id=" + data.children[0].getAttribute("data-id");
+    btnSubmit.textContent = "Ubah Data";
+    btnSubmit.classList.remove("btn-primary");
+    btnSubmit.classList.add("btn-success");
+
+    task.value = data.children[1].textContent;
+    description.value = data.children[2].textContent;
+    pic.value = data.children[3].textContent;
+    deadline.value = data.children[4].textContent;
+    isDone.checked = data.children[5].textContent == "Selesai" ? true : false;
+  }
+
+  function batal(e) {
+    e.preventDefault();
+    task.value = "";
+    description.value = "";
+    pic.value = "";
+    deadline.value = "";
+    isDone.checked = false;
+
+    formInput.action = "";
+    btnSubmit.textContent = "Tambah Mahasiswa";
+    btnSubmit.classList.remove("btn-success");
+    btnSubmit.classList.add("btn-primary");
+  }
+</script>
+{{ end }} `

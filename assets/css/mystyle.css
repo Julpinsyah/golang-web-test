@@ -1,0 +1,9 @@
+.devider {
+  width: 100%;
+  border: 2px solid black;
+}
+
+header h3 {
+  font-size: 1.5em;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
